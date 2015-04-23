@@ -1,7 +1,8 @@
 udocker
 -------
 
-Run docker programs as untrusted local users.
+Run docker containers as untrusted local users, allowing users to
+run containers (only) under their current UID.
 
 Users cannot configure volume mounts, enable privileged operations,
 or do other "unsafe" things with Docker. They cannot explicitly pull
@@ -21,7 +22,9 @@ Usage
 
 On the same host as a running Docker daemon:
 
+```
 $ udocker image [args...]
+```
 
 Installation
 ------------
@@ -29,8 +32,24 @@ Installation
 This depends the binary being installed as setgid 'docker',
 allowing access to the Docker socket.
 
+```
 $ go build udocker.go
 $ chgrp docker udocker
 $ chmod g+s udocker
 $ mv udocker /usr/local/bin
+```
 
+Example
+--------
+
+```
+$ id
+uid=1000(eric) gid=1000(eric)
+groups=1000(eric)
+
+$ udocker busybox id
+iduid=1000(default) gid=1000(default)
+
+$ udocker busybox echo "hello world"
+hello world
+```
