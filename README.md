@@ -6,16 +6,10 @@ run containers (only) under their current UID.
 
 Users cannot configure volume mounts, enable privileged operations,
 or do other "unsafe" things with Docker. They cannot explicitly pull
-images, save images, or do anything else that may be unsafe.
-
-Note that this program is not **completely** safe for running Docker as an
-unprivileged user. It is not possible to prevent the user from
-implicitly causing a 'docker pull' of malicious images, which may use
-setuid binaries to provide local privilege escalation (note: this
-would provide escalation to the "limited" root user typical of a
-Docker container); Remediation of this would include preventing
-access to Docker registries and eventually incorporating a mechanism
-to disallow 'docker run' from implicitly pulling an image.
+images, save images, or do anything else that may be unsafe. For
+safety purposes, all privileged capabilities are disabled, including
+NET_RAW and SETUID. Users should not expect to be able to use
+ICMP ping or setuid binaries from their images.
 
 Usage
 -----
